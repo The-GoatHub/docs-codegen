@@ -3,13 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/google/uuid"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/google/uuid"
 	"github.com/labstack/gommon/log"
 
 	"The-GoatHub/docs-codegen/internal/api"
