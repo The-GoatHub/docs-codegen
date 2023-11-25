@@ -1,0 +1,105 @@
+openapi: 3.1.0
+info:
+  title: Open Api codegen demo
+  description: This is a demo for the Open Api codegen
+  version: "1"
+
+servers:
+  - description: Local
+    url: http://localhost:3000
+
+tags:
+ - name: goats
+   description: Everything about your goats
+ - name: docs
+   description: Documentation
+
+paths:
+  /docs:
+    get:
+      summary: Get Documentation
+      tags:
+        - docs
+      operationId: GetDocumentation
+      x-internal: true
+      responses:
+        200:
+          description: return docs
+
+  /goats/{id}:
+    get:
+      summary: Get a goat by id
+      description: This endpoint returns a goat by id
+      tags:
+        - goats
+      operationId: getGoatByID
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: All good
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Goat'
+        '404':
+          $ref: '#/components/responses/404'
+
+components:
+  schemas:
+    Goat:
+      type: object
+      description: Goat representation
+      required:
+        - id
+        - name
+        - age
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+          example: 'Lovely Goat'
+        age:
+          type: integer
+          format: uint
+          example: 3
+
+    UUID:
+      type: string
+      x-go-type: uuid.UUID
+      x-go-type-import:
+        name: uuid
+        path: github.com/google/uuid
+      example: 3267b999-a3bc-482e-aabd-cb2b2b618cb5
+
+    ErrorMessage:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: 'Some error message'
+
+  parameters:
+    id:
+      name: id
+      in: path
+      required: true
+      description: |
+        UUID parameter, e.g: 8edd8112-c415-11ed-b036-debe37e1cbd6
+      schema:
+        type: string
+        x-go-type: uuid.UUID
+        x-go-type-import:
+          name: uuid
+          path: github.com/google/uuid
+
+  responses:
+    '404':
+      description: 'Not found'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
